@@ -2,20 +2,46 @@ import { useState } from "react";
 import "./App.css";
 import Form from "./components/form/Form.component";
 import List from "./components/list/List.component";
-import { v4 as uuidv4 } from "uuid";
+
+const totalHoursPerWeek = 24 * 7;
 const App = () => {
   const [tasks, setTasks] = useState([]);
+  const [id, setId] = useState([]);
+  const handleOnCheck = (e) => {
+    const { checked, value } = e.target;
+    if (checked) {
+      setId([...id, value]);
+    } else {
+      const tempArry = id.filter((item) => value !== item);
+
+      setId(tempArry);
+    }
+  };
+
+  const deleteAll = () => {
+    console.log(id);
+    if (!window.confirm("Are you sure you want to delete?")) {
+      return;
+    }
+
+    const all = tasks.filter((item) => !id.includes(item._id));
+    setTasks(all);
+    setId([]);
+  };
+
+  const totalHours = tasks.reduce((acc, item) => acc + item.hour, 0);
+
   const taskEntry = (taskObj) => {
-    taskObj._id = uuidv4();
+    if (totalHours + taskObj.hour > totalHoursPerWeek) {
+      return alert("total hours exceeded");
+    }
     setTasks([...tasks, taskObj]);
   };
   const handleOnDelete = (_id) => {
     if (!window.confirm("Are you sure you want to delete?")) {
       return;
     }
-    const filteredArg = tasks.filter((item, index) => {
-      return item._id !== _id;
-    });
+    const filteredArg = tasks.filter((item, index) => item._id !== _id);
 
     setTasks(filteredArg);
   };
@@ -24,7 +50,7 @@ const App = () => {
       return;
     }
     const typeChange = tasks.map((item, index) => {
-      if (item._id !== _id) {
+      if (item._id === _id) {
         item.type = type;
       }
       return item;
@@ -49,10 +75,19 @@ const App = () => {
             tasks={tasks}
             handleOnDelete={handleOnDelete}
             handleOnSwitch={handleOnSwitch}
+            handleOnCheck={handleOnCheck}
           />
+          {id.length > 0 && (
+            <div className="d-grid py-4">
+              <button className="btn btn-lg btn-danger" onClick={deleteAll}>
+                Delete selected tasks
+              </button>
+            </div>
+          )}
+
           <div className="row">
             <div className="col">
-              The Total Time allocated =<span id="totalHours"> 0 </span> hr
+              The Total Time allocated = {totalHours} Hrs
             </div>
           </div>
         </div>

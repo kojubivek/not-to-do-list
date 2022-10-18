@@ -1,4 +1,10 @@
-const BadList = ({ entryList1, handleOnDelete, handleOnSwitch }) => {
+const BadList = ({
+  entryList1,
+  handleOnDelete,
+  handleOnSwitch,
+  handleOnCheck,
+}) => {
+  const totalHours = entryList1.reduce((acc, item) => acc + item.hour, 0);
   return (
     <div className="col text-center">
       <h2>Bad List</h2>
@@ -8,18 +14,28 @@ const BadList = ({ entryList1, handleOnDelete, handleOnSwitch }) => {
         <tbody id="bad-list">
           {entryList1.map((item, i) => {
             return (
-              <tr key={i}>
-                <th scope="row">{i + 1}</th>
+              <tr key={item._id}>
+                <th scope="row">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value={item._id}
+                    id="flexCheckDefault"
+                    onChange={handleOnCheck}
+                  />
+                </th>
                 <td>{item.task}</td>
                 <td>{item.hour}</td>
                 <td>
-                  <button className="btn btn-danger  ">
-                    <i
-                      className="fa-regular fa-trash-can"
-                      onClick={() => handleOnDelete(item._id)}
-                    ></i>{" "}
-                    Delete
-                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => {
+                      console.log("clicked");
+                      return handleOnDelete(item._id);
+                    }}
+                  >
+                    <i className="fa-regular fa-trash-can"></i> Delete
+                  </button>{" "}
                   <button
                     onClick={() => handleOnSwitch(item._id, "entry")}
                     className="btn btn-success"
@@ -34,7 +50,7 @@ const BadList = ({ entryList1, handleOnDelete, handleOnSwitch }) => {
       </table>
       <div className="row">
         <div className="col">
-          The Total Time could have saved =<span id="totalBadHours">0 </span> hr
+          The Total Time could have saved = {totalHours} hrs
         </div>
       </div>
     </div>

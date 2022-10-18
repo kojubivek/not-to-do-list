@@ -1,20 +1,22 @@
 import { useState } from "react";
 
+import { randomStr } from "../../utils/randomGenerator.";
+
 const Form = ({ taskEntry }) => {
   const [formData, setFormData] = useState({});
 
   const handleOnChange = (e) => {
     const { value, name } = e.target;
-    console.log(name, value);
+
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === "hour" ? +value : value,
       type: "entry",
     });
   };
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    taskEntry(formData);
+    taskEntry({ ...formData, _id: randomStr() });
   };
 
   return (
