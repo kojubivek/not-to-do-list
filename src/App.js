@@ -5,7 +5,7 @@ import List from "./components/list/List.component";
 
 const totalHoursPerWeek = 24 * 7;
 const App = () => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([]); //replace by server database
   const [id, setId] = useState([]);
   const handleOnCheck = (e) => {
     const { checked, value } = e.target;

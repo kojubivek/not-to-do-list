@@ -4,6 +4,9 @@ import { randomStr } from "../../utils/randomGenerator.";
 
 const Form = ({ taskEntry }) => {
   const [formData, setFormData] = useState({});
+  const clearInput = (e) => {
+    return (e.target.value = " ");
+  };
 
   const handleOnChange = (e) => {
     const { value, name } = e.target;
@@ -17,6 +20,7 @@ const Form = ({ taskEntry }) => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     taskEntry({ ...formData, _id: randomStr() });
+    clearInput(e);
   };
 
   return (
